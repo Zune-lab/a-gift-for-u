@@ -373,10 +373,14 @@ main{
 .letter-scroll{
   height: clamp(90px, 20vh, 170px);
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   scroll-snap-type: y mandatory;
   scrollbar-width: thin;
   scrollbar-color: var(--purple) rgba(46,42,38,.08);
   padding-right: .6rem;
+  position: relative;
+  isolation: isolate;
 }
 .letter-scroll::-webkit-scrollbar{
   width: 6px;
@@ -402,6 +406,14 @@ main{
   scroll-snap-stop: always;
   opacity: .35;
   transition: opacity .45s ease;
+  position: relative;
+  background: var(--paper);
+  isolation: isolate;
+  contain: layout paint style;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .letter-page.active{
   opacity: 1;
