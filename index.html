@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gửi Zân En</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700;1,800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<header class="hero">
+  <div class="lightstick-wrap" id="lightstick" title="Chạm để bật light stick">
+    <div class="pulse-container" id="pulseContainer"></div>
+    <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle class="ls-glow" cx="50" cy="34" r="40" fill="url(#glow)"/>
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#C9B6FF" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#C9B6FF" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle class="ls-bulb" cx="50" cy="34" r="22" fill="#2A1B4A" stroke="#B79CF2" stroke-width="2.5"/>
+      <circle class="ls-bulb-core" cx="50" cy="34" r="10" fill="#8C6FE6"/>
+      <rect x="45" y="56" width="10" height="60" rx="5" fill="#2A1B4A" stroke="#B79CF2" stroke-width="2"/>
+      <rect x="38" y="112" width="24" height="10" rx="4" fill="#B79CF2"/>
+    </svg>
+    <p class="hint" id="lightHint">chạm vào để bật light stick</p>
+  </div>
+
+  <h1 class="headline">Rớt một kỳ thi,<span>không phải rớt cả cuộc đời.</span></h1>
+  <p class="handwritten">Gửi Zân En — người bạn thân nhất của anh 🧶</p>
+
+  <p class="scroll-hint">↓ đọc tiếp xíu nha</p>
+</header>
+
+<main>
+
+  <section class="letter-section">
+
+    <div class="envelope-scene" id="envelopeScene">
+      <div class="envelope" id="envelope">
+        <div class="env-back"></div>
+        <div class="paper-peek"></div>
+        <div class="env-pocket"></div>
+        <div class="env-flap" id="envFlap">
+          <span class="seal">🧶</span>
+        </div>
+      </div>
+      <p class="envelope-hint" id="envelopeHint">chạm vào phong thư để mở ra đọc nhé</p>
+    </div>
+
+    <div class="letter-reveal" id="letterReveal">
+      <div class="letter-frame">
+        <div class="needles-deco" aria-hidden="true">
+          <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="55" x2="90" y2="8" stroke="#C98BA0" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="8" cy="57" r="4" fill="#C98BA0"/>
+            <line x1="190" y1="55" x2="110" y2="8" stroke="#8C6FE6" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="192" cy="57" r="4" fill="#8C6FE6"/>
+            <path d="M60 40 Q100 60 140 40" stroke="#E3B7C6" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+        <p class="letter-page-hint">cuộn xuống trong khung để đọc từng đoạn nhé ↓</p>
+
+        <div class="letter-scroll" id="letterScroll">
+          <div class="letter-page">
+            <p>Zân En ơi, Anh biết em buồn và thất vọng, anh không dám nói anh hiểu được và anh cũng chả biết phải an ủi em như nào cả. Anh không viết những dòng này để bảo em "cố lên" hay "không sao đâu", vì anh biết ngay lúc này những câu đó nghe sáo rỗng lắm. Anh chỉ muốn em biết là anh vẫn và sẽ luôn ở đây, sẵn sàng nghe em than, trút giận / buồn, hay đơn giản chỉ là ở đó, để em biết mình không 1 mình.</p>
+          </div>
+          <div class="letter-page">
+            <p>Buồn thì em cứ buồn thôi. Cứ khóc một trận cho trôi hết đi, hoặc nằm đờ ra chẳng làm gì cả cũng được. Cứ giải tỏa ra hết cho nhẹ lòng, chuyện ngày mai cứ để mai tính, hôm nay cứ khóc, cứ buồn cho hết đi.</p>
+          </div>
+          <div class="letter-page">
+            <p>Anh không rành về đan len lắm, nhưng anh nghĩ để làm ra được mấy món đồ xinh xinh đó, chắc chắn cũng có lúc em đan lộn mũi và phải kiên nhẫn tháo ra làm lại. Kỳ thi này cũng y như một mũi đan lỗi vậy thôi. Tháo ra, nghỉ tay một chút, rồi đan lại. Đâu ai vì sai một mũi mà vứt luôn cả cuộn len đi, đúng không em?</p>
+          </div>
+          <div class="letter-page">
+            <p>ngồi suy nghĩ 1 tiếng hơn và vẫn không biết viết gì, nên để trống khúc này, soggy.</p>
+          </div>
+          <div class="letter-page">
+            <p>Khi nào em sẵn sàng, anh sẽ cùng em tính xem bước tiếp theo là gì nha: thi lại, học lại, hay rẽ sang một hướng khác. Nhưng không phải hôm nay. Hôm nay việc duy nhất em cần làm là gác hết mọi thứ sang một bên. Cứ nghỉ ngơi cho khỏe, hoặc lôi cuộn len ra đan cho đầu óc đỡ rối thôi.</p>
+            <p class="signature-line">Thương em nhiều,<span class="sig-name">— Vương</span></p>
+          </div>
+        </div>
+
+        <div class="letter-dots" id="letterDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="soothe-section">
+    <p class="eyebrow">vài gợi ý xoa dịu nhỏ</p>
+    <div class="chip-row">
+      <div class="chip">🧶 đan tiếp vài mũi dở dang</div>
+      <div class="chip">🎧 mở album mới nghe lại</div>
+      <div class="chip">💤 ngủ một giấc thật đã</div>
+      <div class="chip">🍜 ăn món gì đó thật ngon</div>
+    </div>
+  </section>
+
+  <section class="yarn-section">
+    <p class="eyebrow">một cuộn len nhỏ</p>
+    <p class="section-sub">chạm vào cuộn len để tháo ra xem có gì bên trong</p>
+    <div class="yarn-ball" id="yarnBall" title="Chạm vào cuộn len">
+      <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="80" r="58" fill="#E3B7C6"/>
+        <path d="M30 70 Q80 20 130 70 Q80 60 30 90 Q80 100 130 90 Q80 140 30 110 Q80 120 130 110" stroke="#C98BA0" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+        <path d="M40 50 Q80 100 120 50" stroke="#F3D4DF" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <circle class="yarn-end" cx="132" cy="92" r="4" fill="#8C6FE6"/>
+      </svg>
+    </div>
+    <p class="hidden-quote" id="yarnQuote">Lỡ tuột một mũi thì tháo ra đan lại,<br>chứ không ai vứt cả cuộn len đi bao giờ.</p>
+  </section>
+
+  <section class="hug-section">
+    <p class="eyebrow">và cuối cùng</p>
+    <button id="hugBtn">Gửi một cái ôm cho cô gái anh từng thích 💜</button>
+    <div class="hearts" id="hearts"></div>
+    <p id="hugMsg">một cái ôm thật chặt từ đứa bạn thân 7 năm hơn 💜🧶</p>
+  </section>
+
+</main>
+
+<footer>
+  làm với tất cả sự quan tâm, dành cho Zân En — borahae 💜
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
