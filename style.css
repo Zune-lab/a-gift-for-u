@@ -37,11 +37,34 @@ body{
   color: var(--star);
   font-family: 'Be Vietnam Pro', sans-serif;
   overflow-x: hidden;
-  transition: filter 1.2s ease;
+  position: relative;
 }
 
-body.lit{
-  filter: brightness(1.2) saturate(1.15);
+/* fixed photo backdrop behind everything, tinted to match the night palette */
+.bg-photo{
+  position: fixed; inset: 0; z-index: -2;
+  background-image: url('pic/concert-bg.jpg');
+  background-size: cover;
+  background-position: center 35%;
+  filter: blur(5px) brightness(.72) saturate(1.25);
+  transform: scale(1.06);
+  transition: filter 1.2s ease;
+}
+.bg-tint{
+  position: fixed; inset: 0; z-index: -1;
+  background: radial-gradient(ellipse 120% 90% at 50% -10%, rgba(140,111,230,0.4) 0%, rgba(31,18,64,0.58) 45%, rgba(20,10,40,0.86) 100%);
+  transition: background 1.2s ease;
+}
+
+/* "lit" glow lives on the backdrop layers only — never on <body>.
+   putting a filter on body would make its fixed-position children
+   (bg-photo/bg-tint/#starfield) re-anchor to body's box instead of
+   the viewport, which is what was breaking the whole layout on tap. */
+body.lit .bg-photo{
+  filter: blur(5px) brightness(.9) saturate(1.4);
+}
+body.lit .bg-tint{
+  background: radial-gradient(ellipse 120% 90% at 50% -10%, rgba(160,130,255,0.5) 0%, rgba(45,26,85,0.55) 45%, rgba(25,13,48,0.82) 100%);
 }
 
 /* stars */
@@ -64,7 +87,91 @@ body.lit{
   50%{ opacity:.9; }
 }
 
-/* HERO */
+/* page wrapper: everything scrolls together, sits above the fixed backdrop */
+#pageContent{
+  position: relative;
+  z-index: 1;
+}
+
+/* PAGE STICKERS — instead of living in one filmstrip section, the
+   stickers are now sprinkled throughout the whole page as standalone
+   scrapbook accents between sections. Each one sits in the normal
+   document flow (never absolutely/fixed positioned), so it can never
+   overlap text or drift on top of content — it just nudges the layout
+   apart a little, like a photo tucked between paragraphs. */
+.page-sticker {
+  display: flex;
+  width: 100%;
+  padding: 0 7vw; /* Đã bỏ padding-top/bottom (1vh) để khung sát lại */
+  height: 0; /* Ép chiều cao về 0 để không cộng dồn làm dài trang */
+  align-items: center; /* Giữ sticker cân bằng ở giữa mốc 0px */
+  overflow: visible; /* Cho phép hình sticker tràn ra ngoài khung 0px */
+  pointer-events: none;
+  position: relative; /* Giữ thuộc tính này để dùng z-index */
+  z-index: 10; /* Nâng layer lên để sticker nổi đè lên trên các section chữ */
+}
+.page-sticker.align-left{ justify-content: flex-start; }
+.page-sticker.align-right{ justify-content: flex-end; }
+
+.sticker{
+  position: relative;
+  cursor: default;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: auto;
+  height: clamp(100px, 24vw, 150px);
+  opacity: 0;
+  transform: translateY(18px) scale(.94);
+  transition: opacity .55s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1);
+  will-change: transform, opacity;
+}
+.sticker img{
+  height: 100%;
+  width: auto;
+  display: block;
+  /* the white sticker outline is now baked into the PNG itself (see
+     pic/ generation) — stacking many CSS drop-shadows here was both
+     blurry (soft alpha edges compound into a foggy halo) and heavy to
+     paint on every scroll/animation frame. A single cheap shadow for
+     "lift off the page" is all CSS needs to do now. */
+  filter: drop-shadow(0 8px 14px rgba(10,4,24,.4));
+  transition: filter .3s ease;
+}
+
+.sticker.in-view{
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(var(--tilt, 0deg));
+  will-change: auto; /* release the GPU layer once the fade-in is done */
+}
+.sticker:hover{
+  transform: translateY(-8px) scale(1.06) rotate(0deg) !important;
+  z-index: 2;
+}
+.sticker:hover img{
+  filter: drop-shadow(0 12px 20px rgba(10,4,24,.45)) drop-shadow(0 0 12px rgba(140,111,230,.3));
+}
+
+/* featured stickers — the two favorites get a bit more presence:
+   larger, with a gentle glow behind them so they read as "special"
+   without needing any extra text or badge */
+.sticker.featured{
+  height: clamp(120px, 30vw, 190px);
+}
+.sticker.featured img{
+  filter: drop-shadow(0 10px 22px rgba(10,4,24,.5));
+}
+.sticker.featured:hover img{
+  filter: drop-shadow(0 14px 24px rgba(10,4,24,.5)) drop-shadow(0 0 30px rgba(201,182,255,.6));
+}
+
+@media (max-width: 520px){
+  /* Sửa padding từ .5vh 6vw thành 0 6vw để bỏ hoàn toàn khoảng không bên trên/dưới */
+  .page-sticker{ padding: 0 6vw; } 
+  .sticker{ height: clamp(78px, 26vw, 110px); }
+  .sticker.featured{ height: clamp(96px, 32vw, 140px); }
+}
+
+/* HERO — kept exactly as the original 2-gift layout */
 .hero{
   position: relative;
   z-index: 1;
@@ -74,9 +181,64 @@ body.lit{
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding: 6vh 6vw 4vh;
+  padding: 40px 20px;
+}
+.hero .eyebrow{
+  font-family:'Space Mono', monospace;
+  letter-spacing:.35em;
+  font-size:11px;
+  color: var(--purple-glow);
+  text-transform:uppercase;
+  margin-bottom:22px;
+  opacity:.85;
+}
+.hero-number{
+  font-family:'Baloo 2', sans-serif;
+  font-weight:800;
+  font-size:clamp(120px, 26vw, 260px);
+  line-height:.85;
+  background:linear-gradient(180deg, var(--star) 0%, var(--purple-glow) 55%, var(--purple) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter: drop-shadow(0 0 40px rgba(140,111,230,.45));
+}
+.hero-title{
+  font-family:'Baloo 2', sans-serif;
+  font-weight:700;
+  font-size:clamp(28px, 5vw, 48px);
+  margin-top:8px;
+  letter-spacing:.01em;
+}
+.hero-sub{
+  margin-top:18px;
+  max-width:560px;
+  font-weight:300;
+  font-size:16px;
+  line-height:1.75;
+  color: rgba(241,236,251,.75);
+}
+.hero-sub b{ color: var(--purple-glow); font-weight:500; }
+.scroll-cue{
+  margin-top:52px;
+  font-family:'Space Mono', monospace;
+  font-size:11px;
+  letter-spacing:.25em;
+  color: rgba(241,236,251,.5);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation:bob 2.2s ease-in-out infinite;
+}
+.scroll-cue .stick{ width:1px; height:30px; background:linear-gradient(var(--purple), transparent); }
+@keyframes bob{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(8px); }
 }
 
+/* light stick — the original icon always stays in normal flow at the
+   top of the hero (never removed from layout, so it can't shift
+   anything below it). a SEPARATE small badge, fixed in the top-right
+   corner, fades in via opacity once the original has scrolled out of
+   view — see .lightstick-corner below. */
 .lightstick-wrap{
   position: relative;
   cursor:pointer;
@@ -88,9 +250,88 @@ body.lit{
   -webkit-tap-highlight-color: transparent;
 }
 
+.lightstick-sentinel{
+  display:block;
+  width: 1px;
+  height: 1px;
+}
+
 .lightstick-wrap svg{
   width: 76px;
   height: auto;
+}
+
+.lightstick-corner{
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 50;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  cursor:pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lightstick-corner.show{
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightstick-corner svg{
+  width: 46px;
+  height: auto;
+}
+.lightstick-corner .pulse-container{
+  top: 23px;
+  right: 23px;
+  left: auto;
+}
+/* Thanh thông báo Glassmorphism tự co giãn */
+.lightstick-corner .hint {
+  position: fixed;
+  top: 90px;
+  
+  /* BÍ QUYẾT FIX LỖI: Dùng lề để căn giữa tuyệt đối thay vì transform */
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  
+  /* Khung tự động ôm sát chữ thay vì bị bè ra */
+  width: max-content;
+  max-width: 85vw;
+  padding: 0.9rem 1.4rem;
+  
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  
+  /* Nền kính mờ đậm hơn một chút để chữ nổi bật hẳn lên */
+  background: rgba(20, 10, 40, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 182, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease; 
+  pointer-events: none;
+}
+
+/* Trạng thái hiện ra */
+.lightstick-corner .hint.visible {
+  opacity: 1;
+  visibility: visible;
+}
+.lightstick-corner .hint:empty{
+  padding: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .ls-glow{
@@ -113,13 +354,14 @@ body.lit .ls-bulb-core{ fill: var(--purple-glow); filter: drop-shadow(0 0 8px va
   margin-top: .6rem;
   letter-spacing:.03em;
   min-height: 1.2em;
+  text-align: center;
 }
 .pulse-text{
   animation: hintPulse .5s ease;
 }
 @keyframes hintPulse{
   0%{ transform: scale(.9); opacity:.3; }
-  50%{ transform: scale(1.08); opacity:1; }
+  50%{ transform: scale(1.06); opacity:1; }
   100%{ transform: scale(1); opacity:1; }
 }
 
@@ -154,39 +396,6 @@ body.lit .ls-bulb-core{ fill: var(--purple-glow); filter: drop-shadow(0 0 8px va
 @keyframes sparkOut{
   0%{ transform: translate(-50%,-50%) scale(.4); opacity: 1; }
   100%{ transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1); opacity: 0; }
-}
-
-.headline{
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-weight: 900;
-  font-size: clamp(1.9rem, 5.2vw, 3.3rem);
-  line-height: 1.32;
-  max-width: 17ch;
-}
-.headline span{
-  display:block;
-  color: var(--purple-glow);
-  font-weight: 800;
-}
-
-.handwritten{
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
-  color: var(--rose-soft);
-  margin-top: 1.6rem;
-}
-
-.scroll-hint{
-  margin-top: 3.5rem;
-  font-size: .85rem;
-  color: rgba(241,236,251,.4);
-  animation: bob 2.2s ease-in-out infinite;
-}
-@keyframes bob{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(6px); }
 }
 
 /* MAIN */
@@ -537,8 +746,387 @@ main{
   transform: translateY(0);
 }
 
+/* MINI GAME — match-3 style, matching the paper/purple palette used
+   everywhere else on the page. Solving it reveals a hidden gift hint. */
+.game-section{
+  text-align: center;
+  padding: 2vh 6vw 8vh;
+}
+
+.game-score-row{
+  max-width: 320px;
+  margin: 0 auto 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+}
+
+.game-progress{
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(201,182,255,.15);
+  border: 1px solid rgba(201,182,255,.28);
+  overflow: hidden;
+}
+.game-progress-bar{
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--purple), var(--rose-soft));
+  transition: width .45s cubic-bezier(.22,.8,.2,1);
+  position: relative;
+}
+@keyframes barGlow{
+  0%{ filter: brightness(1); }
+  50%{ filter: brightness(1.7); }
+  100%{ filter: brightness(1); }
+}
+.game-progress-bar.bar-glow{
+  animation: barGlow .5s ease;
+}
+
+.game-score{
+  font-family: 'Space Mono', monospace;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  color: rgba(241,236,251,.65);
+}
+
+/* confetti hearts that burst when the gift hint unlocks */
+.game-hearts{
+  position: relative;
+  height: 0;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.match-grid{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  width: min(320px, 84vw);
+  margin: 0 auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.match-tile{
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.1rem, 4.4vw, 1.5rem);
+  background: rgba(201,182,255,.1);
+  border: 1px solid rgba(201,182,255,.25);
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
+}
+.match-tile:hover{
+  background: rgba(201,182,255,.18);
+  transform: translateY(-2px);
+}
+.match-tile.selected{
+  border-color: var(--purple-glow);
+  background: rgba(201,182,255,.3);
+  box-shadow: 0 0 0 2px rgba(201,182,255,.35);
+  animation: tileSelectedPulse 1s ease-in-out infinite;
+}
+@keyframes tileSelectedPulse{
+  0%,100%{ transform: scale(1.08); }
+  50%{ transform: scale(1.16); }
+}
+
+/* tiles freshly placed on first load — soft staggered pop-in */
+@keyframes tilePopIn{
+  0%{ opacity: 0; transform: scale(.4) rotate(-8deg); }
+  70%{ opacity: 1; transform: scale(1.08) rotate(3deg); }
+  100%{ opacity: 1; transform: scale(1) rotate(0deg); }
+}
+.match-tile.tile-enter{
+  animation: tilePopIn .42s cubic-bezier(.22,.9,.32,1.3) both;
+}
+
+/* tiles dropping in from above after gravity, like real gems falling */
+@keyframes tileDropIn{
+  0%{ opacity: 0; transform: translateY(-160%); }
+  65%{ opacity: 1; }
+  100%{ opacity: 1; transform: translateY(0); }
+}
+.match-tile.tile-drop{
+  animation: tileDropIn .4s cubic-bezier(.3,1.05,.4,1) both;
+}
+
+/* quick happy bounce right after a successful swap, before the match pops */
+@keyframes tileSwapPop{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(1.22); }
+  100%{ transform: scale(1); }
+}
+.match-tile.swap-pop{
+  animation: tileSwapPop .22s ease;
+}
+
+/* invalid swap: a little shake to say "nope" */
+@keyframes tileShake{
+  0%,100%{ transform: translateX(0); }
+  20%{ transform: translateX(-6px) rotate(-4deg); }
+  40%{ transform: translateX(6px) rotate(4deg); }
+  60%{ transform: translateX(-4px) rotate(-2deg); }
+  80%{ transform: translateX(4px) rotate(2deg); }
+}
+.match-tile.shake{
+  animation: tileShake .32s ease;
+  border-color: rgba(201,139,160,.6);
+}
+
+/* matched tiles: a little burst of scale + spin + glow before vanishing */
+@keyframes tileBurst{
+  0%{ transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
+  35%{ transform: scale(1.4) rotate(10deg); opacity: 1; filter: brightness(1.6) drop-shadow(0 0 8px var(--purple-glow)); }
+  100%{ transform: scale(.15) rotate(-12deg); opacity: 0; filter: brightness(1.6); }
+}
+.match-tile.cleared{
+  animation: tileBurst .3s ease forwards;
+  pointer-events: none;
+  border-color: transparent;
+  background: transparent;
+}
+
+.gift-hint{
+  max-width: 380px;
+  margin: 2.2rem auto 0;
+  background: linear-gradient(155deg, var(--night-soft) 0%, var(--purple) 55%, var(--rose) 130%);
+  background-image:
+    linear-gradient(155deg, var(--night-soft) 0%, var(--purple) 55%, var(--rose) 130%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 10px);
+  color: var(--star);
+  text-align: center;
+  border-radius: 16px;
+  padding: 1.7rem 1.6rem 1.5rem;
+  position: relative;
+  box-shadow: 0 24px 50px rgba(15,6,32,.55), 0 0 0 1px rgba(201,182,255,.25);
+  opacity: 0;
+  transform: translateY(16px) scale(.96) rotate(-1deg);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+  transition: opacity .7s ease, transform .7s ease, max-height .7s ease, padding .7s ease;
+}
+.gift-hint::before{
+  content: "";
+  position: absolute;
+  top: 0; left: 2rem; right: 2rem;
+  height: 6px;
+  background: linear-gradient(90deg, var(--purple-glow), var(--rose-soft));
+  border-radius: 0 0 3px 3px;
+}
+.gift-hint.show{
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(-1deg);
+  max-height: 340px;
+  padding-top: 1.7rem;
+  padding-bottom: 1.5rem;
+  pointer-events: auto;
+}
+.gift-hint-pin{
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  border-radius: 50%;
+  background: linear-gradient(155deg, var(--purple-glow), var(--rose-soft));
+  box-shadow: 0 6px 14px rgba(15,6,32,.5), 0 0 0 3px var(--night-soft);
+  opacity: 0;
+  transform: translateX(-50%) translateY(6px) rotate(-10deg) scale(.6);
+  transition: opacity .5s ease .15s, transform .5s cubic-bezier(.3,1.4,.4,1) .15s;
+}
+.gift-hint.show .gift-hint-pin{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) rotate(-10deg) scale(1);
+}
+.gift-hint-glow{
+  position: absolute;
+  inset: -35% -30% auto auto;
+  width: 55%;
+  height: 130%;
+  background: radial-gradient(circle, rgba(255,255,255,.35), transparent 70%);
+  pointer-events: none;
+  opacity: .5;
+  z-index: -1;
+}
+@keyframes hintGlowPulse{
+  0%,100%{ opacity: .4; transform: scale(1); }
+  50%{ opacity: .85; transform: scale(1.12); }
+}
+.gift-hint.show .gift-hint-glow{
+  animation: hintGlowPulse 2.6s ease-in-out infinite;
+}
+.gift-hint.show .gift-hint-label{
+  animation: tilePopIn .5s ease .28s both;
+}
+.gift-hint.show .gift-hint-title{
+  animation: tilePopIn .5s ease .38s both;
+}
+.gift-hint.show .gift-hint-divider{
+  animation: dividerGrow .5s ease .5s both;
+}
+.gift-hint.show .gift-hint-text{
+  animation: tilePopIn .5s ease .6s both;
+}
+.gift-hint-label{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: 'Space Mono', monospace;
+  font-size: .66rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--star);
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.3);
+  padding: .4rem 1rem;
+  border-radius: 999px;
+  margin: .2rem 0 1rem;
+}
+.gift-hint-title{
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+@keyframes dividerGrow{
+  0%{ width: 0; opacity: 0; }
+  100%{ width: 70%; opacity: 1; }
+}
+.gift-hint-divider{
+  width: 70%;
+  height: 0;
+  margin: 1rem auto;
+  border-top: 2px dashed rgba(255,255,255,.35);
+}
+.gift-hint-text{
+  font-size: .92rem;
+  line-height: 1.7;
+  font-weight: 500;
+  font-style: italic;
+  color: rgba(241,236,251,.85);
+}
+
+@media (max-width: 420px){
+  .match-grid{ gap: 5px; }
+}
+
+/* PLAN SECTION — pick a hangout time + leave a message, saved to Supabase */
+.plan-section{
+  padding: 2vh 6vw 8vh;
+  text-align: center;
+}
+
+.plan-form{
+  max-width: 380px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  text-align: left;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(201,182,255,.22);
+  border-radius: 16px;
+  padding: 1.6rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 20px 45px rgba(15,6,32,.35);
+}
+
+.plan-field{
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.plan-field-label{
+  font-size: .82rem;
+  color: rgba(241,236,251,.75);
+  font-weight: 500;
+}
+
+.plan-field input,
+.plan-field textarea{
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: .92rem;
+  color: var(--star);
+  background: rgba(20,10,40,.4);
+  border: 1px solid rgba(201,182,255,.3);
+  border-radius: 10px;
+  padding: .75rem .9rem;
+  outline: none;
+  resize: vertical;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.plan-field input::placeholder,
+.plan-field textarea::placeholder{
+  color: rgba(241,236,251,.35);
+}
+.plan-field input:focus,
+.plan-field textarea:focus{
+  border-color: var(--purple-glow);
+  background: rgba(20,10,40,.6);
+  box-shadow: 0 0 0 3px rgba(201,182,255,.18);
+}
+/* the native calendar-picker icon defaults to near-invisible dark on
+   this background — invert it so it's actually visible/tappable */
+.plan-field input[type="datetime-local"]::-webkit-calendar-picker-indicator{
+  filter: invert(1) brightness(1.6);
+  cursor: pointer;
+}
+
+#planSubmitBtn{
+  align-self: center;
+  margin-top: .3rem;
+  background: linear-gradient(135deg, var(--purple), var(--rose));
+  border: none;
+  color: var(--star);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: .9rem 2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform .3s ease, filter .3s ease, opacity .3s ease;
+}
+#planSubmitBtn:hover:not(:disabled){
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+#planSubmitBtn:disabled{
+  opacity: .6;
+  cursor: default;
+  transform: none;
+}
+
+.plan-status{
+  text-align: center;
+  font-size: .88rem;
+  min-height: 1.3em;
+  color: var(--purple-glow);
+  transition: opacity .3s ease;
+}
+.plan-status.error{
+  color: var(--rose);
+}
+
 /* HUG SECTION */
 .hug-section{
+  position: relative;
   text-align:center;
   padding: 2vh 6vw 12vh;
 }
@@ -632,12 +1220,97 @@ footer{
     width: 100px;
   }
 }
+/* Sticker size nhỏ, trôi nổi tự do ở góc trang thư */
+.letter-inline-sticker {
+  position: absolute;
+  bottom: 10px; /* Canh cách lề dưới của đoạn văn một chút */
+  right: 15px; /* Nằm gọn gàng ở góc lề phải */
+  width: 75px; /* Thu nhỏ lại cho giống sticker dán lén */
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(10,4,24,0.2));
+  transform: rotate(12deg); /* Nghiêng nhẹ một góc cho tự nhiên */
+  transition: transform 0.3s ease;
+  z-index: 10; 
+}
 
-@media (max-width: 340px){
-  .headline{
-    font-size: 1.7rem;
-  }
-  .handwritten{
-    font-size: 1.05rem;
-  }
+.letter-inline-sticker:hover {
+  transform: rotate(0deg) scale(1.1);
+}
+/* Sticker dán góc dưới bên trái bên trong các trang thư */
+.letter-bottom-left-sticker {
+  position: absolute;
+  bottom: 3px;  /* Nằm sát mép dưới của đoạn trống */
+  left: 10px;   /* Cách lề trái một chút xíu */
+  width: clamp(75px, 18vw, 105px); /* Thu gọn lại cho xinh xắn */
+  height: auto;
+  z-index: 10;
+  filter: drop-shadow(0 4px 8px rgba(10,4,24,0.2));
+  transform: rotate(-10deg); /* Nghiêng nhẹ sang trái */
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+}
+
+.letter-bottom-left-sticker:hover {
+  transform: rotate(0deg) scale(1.1);
+}
+#hugSticker {
+  position: absolute;
+  width: 50px;   /* Bóp nhỏ lại từ 90px xuống 65px */
+  bottom: -10px; /* Căn lại một chút xíu cho hợp với size nhỏ */
+  right: 15px;   
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(40px) scale(0.5) rotate(15deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+  z-index: 10;
+  filter: drop-shadow(0 6px 12px rgba(10,4,24,0.3));
+}
+#hugSticker.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1) rotate(10deg);
+}
+/* =========================================
+   HIỆU ỨNG ÁNH ĐÈN SÂN KHẤU KHI BẬT LIGHTSTICK
+   ========================================= */
+
+/* Tạo 2 luồng ánh sáng ảo ẩn đi khi chưa bật đèn */
+.bg-tint::before, 
+.bg-tint::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  width: 60vw;
+  height: 140vh;
+  /* Dải màu sáng mờ tỏa ra từ phía trên */
+  background: radial-gradient(ellipse at top, rgba(201, 182, 255, 0.15) 0%, transparent 70%);
+  transform-origin: top center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Đèn số 1 quét từ trái sang phải khi có class .lit */
+body.lit .bg-tint::before {
+  opacity: 1;
+  animation: sweepLeft 6s ease-in-out infinite alternate;
+}
+
+/* Đèn số 2 quét lệch nhịp một chút để tạo cảm giác tự nhiên */
+body.lit .bg-tint::after {
+  opacity: 1;
+  animation: sweepRight 8s ease-in-out infinite alternate;
+}
+
+/* Hiệu ứng chuyển động (Keyframes) */
+@keyframes sweepLeft {
+  0% { transform: translateX(-50%) rotate(-25deg); }
+  100% { transform: translateX(-50%) rotate(15deg); }
+}
+
+@keyframes sweepRight {
+  0% { transform: translateX(-50%) rotate(30deg); }
+  100% { transform: translateX(-50%) rotate(-10deg); }
 }

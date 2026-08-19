@@ -15,12 +15,35 @@
 <meta name="twitter:description" content="có một thứ nho nhỏ đang chờ em ở đây...">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700;1,800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700;1,800&family=Space+Mono:wght@400;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="bg-photo"></div>
+<div class="bg-tint"></div>
+
 <div id="starfield"></div>
+
+<div class="lightstick-corner" id="lightstickCorner" title="Chạm để bật light stick">
+  <div class="pulse-container" id="pulseContainerCorner"></div>
+  <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle class="ls-glow" cx="50" cy="34" r="40" fill="url(#glowCorner)"/>
+    <defs>
+      <radialGradient id="glowCorner" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#C9B6FF" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#C9B6FF" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle class="ls-bulb" cx="50" cy="34" r="22" fill="#2A1B4A" stroke="#B79CF2" stroke-width="2.5"/>
+    <circle class="ls-bulb-core" cx="50" cy="34" r="10" fill="#8C6FE6"/>
+    <rect x="45" y="56" width="10" height="60" rx="5" fill="#2A1B4A" stroke="#B79CF2" stroke-width="2"/>
+    <rect x="38" y="112" width="24" height="10" rx="4" fill="#B79CF2"/>
+  </svg>
+  <p class="hint" id="lightHintCorner"></p>
+</div>
+
+<div id="pageContent">
 
 <header class="hero">
   <div class="lightstick-wrap" id="lightstick" title="Chạm để bật light stick">
@@ -40,15 +63,31 @@
     </svg>
     <p class="hint" id="lightHint">chạm vào để bật light stick</p>
   </div>
+  <span class="lightstick-sentinel" id="lightstickSentinel" aria-hidden="true"></span>
 
-  <h1 class="headline">Rớt một kỳ thi,<span>không phải rớt cả cuộc đời.</span></h1>
-  <p class="handwritten">Gửi Zân En — người bạn thân nhất của anh 🧶</p>
-
-  <p class="scroll-hint">↓ đọc tiếp xíu nha</p>
+  <div class="eyebrow">Borahae · I Purple You</div>
+  <div class="hero-number">7</div>
+  <div class="hero-title">Năm Bên Nhau</div>
+  <p class="hero-sub">
+    Từ những ngày đầu chơi game cùng nhau đến hôm nay — <b>7 năm</b>, cảm ơn em vì đã là 1 phần thanh xuân của anh, cảm ơn em vì chưa từng từ bỏ anh, cảm ơn em vì một hành trình chưa từng đơn độc.
+    Cảm ơn vì đã luôn ở đây.
+  </p>
+  <div class="scroll-cue"><span>CUỘN XUỐNG</span><span class="stick"></span></div>
 </header>
 
 <main>
 
+  <!-- Bé bên phải (sticker-07) -->
+  <div class="page-sticker align-right">
+    <!-- Thêm top và right vào trong style -->
+    <div class="sticker featured" style="--tilt:8deg; top: -40px; right: -10px;"><img src="pic/sticker-07.png" alt=""></div>
+  </div>
+
+  <!-- Bé bên trái (sticker-03) -->
+  <div class="page-sticker align-left">
+    <!-- Thêm top và left vào trong style -->
+    <div class="sticker" style="--tilt:-6deg; top: -80px; left: -10px;"><img src="pic/sticker-03.png" alt=""></div>
+  </div>
   <section class="letter-section">
 
     <div class="envelope-scene" id="envelopeScene">
@@ -56,7 +95,7 @@
         <div class="env-back"></div>
         <div class="paper-peek"></div>
         <div class="env-pocket"></div>
-        <div class="env-flap" id="envFlap">
+        <div class="env-flap">
           <span class="seal">🧶</span>
         </div>
       </div>
@@ -78,19 +117,18 @@
 
         <div class="letter-scroll" id="letterScroll">
           <div class="letter-page">
-            <p>Zân En ơi, Anh biết em buồn và thất vọng, anh không dám nói anh hiểu được và anh cũng chả biết phải an ủi em như nào cả. Anh không viết những dòng này để bảo em "cố lên" hay "không sao đâu", vì anh biết ngay lúc này những câu đó nghe sáo rỗng lắm. Anh chỉ muốn em biết là anh vẫn và sẽ luôn ở đây, sẵn sàng nghe em than, trút giận / buồn, hay đơn giản chỉ là ở đó, để em biết mình không 1 mình.</p>
+            <p>Zân En ơi, anh biết em buồn và thất vọng, anh không dám nói anh hiểu được và anh cũng chả biết phải an ủi em như nào cả. Anh không viết những dòng này để bảo em "cố lên" hay "không sao đâu", vì anh biết ngay lúc này những câu đó nghe sáo rỗng lắm. Anh chỉ muốn em biết là anh vẫn và sẽ luôn ở đây, sẵn sàng nghe em than, trút giận/buồn, hay đơn giản chỉ là ở đó, để em biết mình không 1 mình. </p>
           </div>
           <div class="letter-page">
-            <p>Buồn thì em cứ buồn thôi. Cứ khóc một trận cho trôi hết đi, hoặc nằm đờ ra chẳng làm gì cả cũng được. Cứ giải tỏa ra hết cho nhẹ lòng, chuyện ngày mai cứ để mai tính, hôm nay cứ khóc, cứ buồn cho hết đi.</p>
+            <p>Mỗi khi buồn hay mệt mỏi, hoặc cảm thấy mình không thể chịu đựng nổi nữa, thì hãy cứ mở bức thư này ra và nhớ là anh luôn ở đây với em nha. Anh chưa từng rời đi dù cho có bị em block (rất nhiều lần) thì anh vẫn nhây cố tìm cách liên lạc lại với em đó thôi. Nên phải LUÔN LUÔN nhớ là dù có chuyện gì thì cũng đừng ngại kể anh nha. Anh không bỏ em đâu. 💜</p>
+            <img src="pic/sticker-01.png" class="letter-bottom-left-sticker" alt="Sticker 1">
           </div>
           <div class="letter-page">
-            <p>Anh không rành về đan len lắm, nhưng anh nghĩ để làm ra được mấy món đồ xinh xinh đó, chắc chắn cũng có lúc em đan lộn mũi và phải kiên nhẫn tháo ra làm lại. Kỳ thi này cũng y như một mũi đan lỗi vậy thôi. Tháo ra, nghỉ tay một chút, rồi đan lại. Đâu ai vì sai một mũi mà vứt luôn cả cuộn len đi, đúng không em?</p>
+            <p>Anh không rành về đan len lắm, nhưng anh nghĩ để làm ra được mấy món đồ xinh xinh đó, chắc chắn cũng có lúc em đan lộn mũi và phải kiên nhẫn tháo ra làm lại. Những khó khăn hay muộn phiền ngoài kia đôi khi cũng y như một mũi đan lỗi vậy thôi. Tháo ra, nghỉ tay một chút, rồi đan lại. Đâu ai vì sai một mũi mà vứt luôn cả cuộn len đi, đúng không em?</p>
           </div>
           <div class="letter-page">
-            <p>ngồi suy nghĩ 1 tiếng hơn và vẫn không biết viết gì, nên để trống khúc này, soggy.</p>
-          </div>
-          <div class="letter-page">
-            <p>Khi nào em sẵn sàng, anh sẽ cùng em tính xem bước tiếp theo là gì nha: thi lại, học lại, hay rẽ sang một hướng khác. Nhưng không phải hôm nay. Hôm nay việc duy nhất em cần làm là gác hết mọi thứ sang một bên. Cứ nghỉ ngơi cho khỏe, hoặc lôi cuộn len ra đan cho đầu óc đỡ rối thôi.</p>
+            <p>Khi nào em sẵn sàng, anh sẽ cùng em tính xem bước tiếp theo nên làm gì nha. Nhưng không phải hôm nay. Hôm nay việc duy nhất em cần làm là gác hết mọi thứ sang một bên. Cứ nghỉ ngơi cho khỏe, hoặc lôi cuộn len ra đan cho đầu óc đỡ rối thôi.</p>
+            <img src="pic/sticker-06.png" class="letter-inline-sticker" alt="Nụ cười của em">
             <p class="signature-line">Thương em nhiều,<span class="sig-name">— Vương</span></p>
           </div>
         </div>
@@ -110,6 +148,11 @@
     </div>
   </section>
 
+  <div class="page-sticker align-left">
+    <!-- Đẩy xuống 40px và dịch sát trái -->
+    <div class="sticker" style="--tilt:-7deg; top: -40px; left: -5px;"><img src="pic/sticker-02.png" alt=""></div>
+  </div>
+
   <section class="yarn-section">
     <p class="eyebrow">một cuộn len nhỏ</p>
     <p class="section-sub">chạm vào cuộn len để tháo ra xem có gì bên trong</p>
@@ -124,18 +167,72 @@
     <p class="hidden-quote" id="yarnQuote">Lỡ tuột một mũi thì tháo ra đan lại,<br>chứ không ai vứt cả cuộn len đi bao giờ.</p>
   </section>
 
-  <section class="hug-section">
-    <p class="eyebrow">và cuối cùng</p>
-    <button id="hugBtn">Gửi một cái ôm cho cô gái anh từng thích 💜</button>
-    <div class="hearts" id="hearts"></div>
-    <p id="hugMsg">một cái ôm thật chặt từ đứa bạn thân 7 năm hơn 💜🧶</p>
+  <section class="game-section" id="gameSection">
+    <p class="eyebrow">một trò chơi nhỏ</p>
+    <p class="section-sub">nối 3 ô giống nhau trở lên để ghi điểm, đủ điểm sẽ mở khóa một phiếu đổi quà 🎟️</p>
+
+    <div class="game-score-row">
+      <div class="game-progress"><div class="game-progress-bar" id="gameProgressBar"></div></div>
+      <p class="game-score" id="gameScoreText">0 / 60 điểm</p>
+    </div>
+
+    <div class="match-grid" id="matchGrid" aria-label="trò chơi ghép ô"></div>
+    <div class="hearts game-hearts" id="gameHearts"></div>
+
+    <div class="gift-hint" id="giftHint">
+      <div class="gift-hint-glow" aria-hidden="true"></div>
+      <span class="gift-hint-pin" aria-hidden="true">🎟️</span>
+      <p class="gift-hint-label">🎟️ phiếu đổi quà đã mở khóa</p>
+      <p class="gift-hint-title" id="giftHintTitle">đổi lấy 1 món quà bất kì mà em thích</p>
+      <div class="gift-hint-divider" aria-hidden="true"></div>
+      <p class="gift-hint-text" id="giftHintText">chỉ có hiệu lực khi em chịu đi chơi cùng anh. 💜</p>
+    </div>
   </section>
 
+  <section class="plan-section" id="planSection">
+    <p class="eyebrow">một buổi đi chơi thì sao nhỉ</p>
+    <p class="section-sub">chọn ngày giờ em rảnh, hoặc nhắn lại gì đó cho anh cũng được, không bắt buộc cả hai đâu 💌</p>
+
+    <form class="plan-form" id="planForm">
+      <label class="plan-field">
+        <span class="plan-field-label">📅 ngày giờ em muốn đi chơi</span>
+        <input type="datetime-local" id="planDatetime" name="planDatetime">
+      </label>
+
+      <label class="plan-field">
+        <span class="plan-field-label">💌 nhắn gì đó cho anh</span>
+        <textarea id="planMessage" name="planMessage" rows="3" placeholder="em muốn nói..."></textarea>
+      </label>
+
+      <button type="submit" id="planSubmitBtn">Gửi cho anh 💜</button>
+      <p class="plan-status" id="planStatus"></p>
+    </form>
+  </section>
+
+  <div class="page-sticker align-right">
+    <div class="sticker" style="--tilt:7deg"><img src="pic/sticker-05.png" alt=""></div>
+  </div>
+  <div class="page-sticker align-left">
+    <!-- Đẩy xuống 60px để nằm cạnh nút bấm -->
+    <div class="sticker" style="--tilt:-5deg; top: -50px; left: -10px;"><img src="pic/sticker-04.png" alt=""></div>
+  </div>
+
+  <section class="hug-section">
+    <p class="eyebrow">và cuối cùng</p>
+    <button id="hugBtn">Gửi một cái ôm cho cô gái anh từng siêuuuuu thích 💜</button>
+    <div class="hearts" id="hearts"></div>
+    <p id="hugMsg">cái ôm này thay cho lời hứa: 7 năm hay bao lâu đi nữa, anh vẫn luôn ở đây 💜🧶</p>
+    
+    <!-- Sticker bí mật ẩn giấu -->
+    <img src="pic/sticker-08.png" id="hugSticker" alt="Ôm ôm">
+  </section>
 </main>
 
 <footer>
   làm với tất cả sự quan tâm, dành cho Zân En — borahae 💜
 </footer>
+
+</div>
 
 <script src="script.js"></script>
 </body>
