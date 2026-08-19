@@ -264,7 +264,7 @@ if (matchGrid) {
   const ROWS = 6;
   const COLS = 6;
   const TILES = ['🧶', '💜', '✨', '🌙', '🎀', '💫'];
-  const TARGET = 300;
+  const TARGET = 250;
 
   const gameHearts = document.getElementById('gameHearts');
 
